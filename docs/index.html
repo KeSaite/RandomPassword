@@ -1,1 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>随机密码生成器</title>
+    <link rel="icon" href="https://em-content.zobj.net/source/microsoft/378/locked_1f512.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #FFFFFF;
+            color: #202124;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
 
+        .container {
+            width: 100%;
+            max-width: 400px; /* Adjusted to fit the content */
+            padding: 24px;
+            background: #FFFFFF;
+            border-radius: 16px;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            font-weight: 500;
+            margin-bottom: 24px;
+        }
+
+        .input-field input,
+        .input-field input:focus {
+            width: 100%; /* Full width of the input fields */
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px; /* Space for the strength meter */
+            font-size: 16px;
+            outline: none;
+            box-sizing: border-box; /* Border and padding included in width */
+        }
+        .input-field,
+		
+        .options {
+            text-align: left;
+            width: 100%; /* Adjusted for padding to align with the input fields */
+            padding: 0 10px; /* Same padding as the input fields for alignment */
+            box-sizing: border-box;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .option input {
+            margin-right: 10px;
+        }
+		
+		.generate-btn {
+			padding: 10px;
+			background-color: #1a73e8;
+			color: #fff;
+			border: none;
+			border-radius: 4px;
+			font-size: 16px;
+			font-weight: 500;
+			cursor: pointer;
+			transition: background-color 0.3s;
+			outline: none;
+			width: 30%; /* Full width */
+			/* 如果需要固定宽度，可以使用像素值，例如：width: 250px; */
+			/* 如果需要按钮比容器窄，可以使用 max-width 和 margin auto 来居中按钮 */
+			/* max-width: 250px; */
+			/* margin: 0 auto; */
+		}
+
+        .options label,
+        .generate-btn {
+            display: block; /* Full width for the button and label */
+            margin-bottom: 10px; /* Space between the options and button */
+        }
+
+        .option input {
+            margin-right: 10px;
+        }
+
+        .generate-btn {
+            padding: 10px;
+            background-color: #1a73e8;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            outline: none;
+        }
+
+        .generate-btn:hover {
+            background-color: #185abc;
+        }
+
+        .strength-meter,
+        .strength-meter-fill {
+            width: 100%; /* 密码强度指示条 */
+            border-radius: 4px;
+        }
+
+        .strength-meter {
+            height: 5px;
+            background: #e0e0e0;
+            position: relative;
+        }
+
+        .strength-meter-fill {
+            height: 100%;
+            width: 0;
+            background: #34a853;
+            position: absolute;
+            transition: width 0.5s ease;
+        }
+
+		.instructions {
+			background-color: #FFF8E1; /* 黄色背景 */
+			color: #333333;
+			padding: 16px;
+			border-radius: 8px;
+			font-size: 16px;
+			margin-bottom: 20px;
+			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+			width: 100%; /* 或者使用固定的宽度如 max-width: 300px; */
+			max-width: 350px; /* 调整这个值来增大或减小提示框的最大宽度 */
+			text-align: left;
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+		}
+
+        .instructions p {
+            margin: 0;
+            font-weight: bold;
+        }
+
+        .instructions ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .instructions li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .instructions li .emoji {
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+<body>
+    <div class="instructions">
+        <p>👉 提示：</p>
+        <ul>
+            <li><span class="emoji">🔒</span> 密码计算全部在本地进行</li>
+            <li><span class="emoji">🔑</span> 记住密码更容易一点（固定）</li>
+            <li><span class="emoji">🧠</span> 反人性的接口 - 记住: 比如QQ密码区分大小写qq</li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h1>密码生成器</h1>
+        <div class="input-field">
+            <input type="number" id="length" placeholder="长度 (8-20)" min="8" max="20">
+        </div>
+        <div class="options">
+            <label class="option"><input type="checkbox" id="uppercase"> 包含大写字母</label>
+            <label class="option"><input type="checkbox" id="numbers"> 包含数字</label>
+            <label class="option"><input type="checkbox" id="symbols"> 包含符号</label>
+        </div>
+        <button class="generate-btn" onclick="generatePassword()">生成密码</button>
+        <div class="input-field">
+            <input type="text" id="password" placeholder="您的密码" readonly>
+        </div>
+        <div class="strength-meter">
+            <div class="strength-meter-fill" id="strength-meter-fill"></div>
+        </div>
+    </div>
+
+    <script>
+        function generatePassword() {
+            var length = document.getElementById('length').value;
+            var includeUppercase = document.getElementById('uppercase').checked;
+            var includeNumbers = document.getElementById('numbers').checked;
+            var includeSymbols = document.getElementById('symbols').checked;
+
+            var charset = "abcdefghijklmnopqrstuvwxyz";
+            if (includeUppercase) charset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            if (includeNumbers) charset += "0123456789";
+            if (includeSymbols) charset += "!@#$%^&*()";
+
+            var password = "";
+            for (var i = 0; i < length; i++) {
+                var randomIndex = Math.floor(Math.random() * charset.length);
+                password += charset[randomIndex];
+            }
+
+            document.getElementById('password').value = password;
+            checkPasswordStrength(password);
+        }
+
+        function checkPasswordStrength(password) {
+            var strengthValue = 0;
+            if (password.length > 7) strengthValue++;
+            if (password.match(/[A-Z]/)) strengthValue++;
+            if (password.match(/[0-9]/)) strengthValue++;
+            if (password.match(/[\W_]/)) strengthValue++;
+
+            var meterFill = document.getElementById('strength-meter-fill');
+            var meterText = document.getElementById('strength-text');
+            meterFill.style.width = strengthValue * 25 + '%';
+            meterText.textContent = getStrengthText(strengthValue);
+            meterText.style.color = getStrengthColor(strengthValue);
+        }
+
+        function getStrengthText(strengthValue) {
+            switch(strengthValue) {
+                case 1: return '很弱';
+                case 2: return '较弱';
+                case 3: return '中等';
+                case 4: return '强';
+                default: return '';
+            }
+        }
+
+        function getStrengthColor(strengthValue) {
+            switch(strengthValue) {
+                case 1: return '#ea4335'; /* Google Red 500 */
+                case 2: return '#fbbc05'; /* Google Yellow 500 */
+                case 3: return '#34a853'; /* Google Green 500 */
+                case 4: return '#4285f4'; /* Google Blue 500 */
+                default: return '#e0e0e0'; /* Material Grey 300 */
+            }
+        }
+    </script>
+</body>
+</html>
