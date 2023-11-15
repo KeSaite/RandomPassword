@@ -1,5 +1,5 @@
 # RandomPassword
-RandomPassword Tool
+RandomPassword
 这个项目是一个随机密码生成器，它使用Material You设计风格，帮助用户创建安全的密码。
 
 ## 特性
