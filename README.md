@@ -14,6 +14,6 @@ RandomPassword Tool
 要在本地使用这个密码生成器，你需要克隆这个仓库，然后在支持现代浏览器的环境中打开`index.html`文件。
 
 ```bash
-git clone https://github.com/yourusername/random-password-generator.git
+git clone https://github.com/KeSaite/RandomPassword.git
 cd random-password-generator
 # 打开index.html
